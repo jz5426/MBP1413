@@ -1,0 +1,5 @@
+mimic_cxr:
+  name: "mimic_cxr"
+  data_type: "imagetext_eval"
+  data_path: "/cluster/projects/mcintoshgroup/CXR-CLIP/mimic_cxr_jpg_metadata/mimic_test_400png.csv"
+  normalize: ${designs.model.image_encoder.configs.normalize}

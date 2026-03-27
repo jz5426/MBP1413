@@ -1,0 +1,6 @@
+name: adamw
+no_decay: ${designs.optimizer.no_decay}
+config:
+  lr: ${designs.optimizer.lr}
+  weight_decay: ${designs.optimizer.weight_decay}
+  betas: ${designs.optimizer.adamw_betas}

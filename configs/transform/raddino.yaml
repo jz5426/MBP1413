@@ -1,0 +1,23 @@
+train:
+  RandomResizedCrop:
+    size: ${base.image_size}
+    scale: [0.8, 1.0]
+  RandomHorizontalFlip:
+    p: 0.3 # from laihaoran
+  CLAHE:
+    clip_limit: 2.0 # safe choice based on chatgpt
+  ColorJitter: # from laihaoran
+    brightness: 0.2
+    contrast: 0.2
+  CenterCrop:
+    size: ${base.image_size}
+valid:
+  Resize:
+    size: ${base.image_size}
+  CenterCrop:
+    size: ${base.image_size}
+test:
+  Resize:
+    size: ${base.image_size}
+  CenterCrop:
+    size: ${base.image_size}

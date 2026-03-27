@@ -1,0 +1,151 @@
+# configuration to train the dual token vanilla clip model without any modification.
+defaults:
+  - _self_
+  - data_train:
+    - mimi_cxr_max_qwen30b_locationLabel
+  - data_valid:
+  - dataloader: dataloader_generic
+  - tokenizer: clinical_laihaoran_mpbert # clinical_laihaoran_mpbert clinical_bert mpnet # without pretrained in CARZero, SSL version.
+  - transform: raddino # laihaoran raddino_fixed_ratio raddino
+  - model: model_generic
+  - optimizer: adamw
+  - scheduler: scheduler_generic
+  - loss: cxrclip_plus_dqn
+  - image_model: raddino # dinov3_vits16 dinov3_vitsplus16, dinov3_vitb16. vit16m3ae
+  - text_encoder: mpbert # mpbert mpnet # laihaoran_mpbert, emilyalsentzer_bioclinicalbert the bert from cxrclip original derived.
+
+base:
+  seed: 1234
+  amp : True
+  image_size: 224 # 224
+  text_max_length: 256 # content length, not including special chars like CLS2
+  prompt_max_length: 128 # 128 for even number of gpu training
+  dqn_label_max_length: 48 # 48 with the label only, with description -> 68?
+  loss_best: contrastive
+  data_frac: 1.0
+  output:
+    checkpoint: ${custom_dir.checkpoint_dir}/checkpoints/
+    tensorboard: ${hydra:run.dir}/tensorboard/
+
+designs:
+  eval_method: 'cosine'
+  zero_shot_method: 'zeroshot_binary_dqn'
+  data:
+    observation_explanation: null # 'chatgpt5_observation_explanation.json', 'qwen30b_204disease_descriptions.json', null
+    use_random_description: False
+    random_description_prob: 0.0
+    enable_positive_negative_label_swapping: False # TODO: must be false
+    anonymize_observation_explanation: False
+    add_alignment_prompt_prefix: True # TODO：consider removing this.
+    labels_sample_size: 128  #'vindr_nih14_chexpert', all_combined
+    report_col: 'clean_text'
+    augmented_report_col: 'clean_text_augment'
+    augmentation_type: 'clip_with_shared_worldLabels' # one of {image_shared_worldlabels, cxrclip, one_image_one_text_one_prompt, two_images_two_texts_one_prompt}
+    alignment_prompt_col: null # or null
+  dataloader:
+    num_workers: 10
+    batch_size: 128 #128, 132
+  tokenizer:
+    text_dual_cls: False # ALWAYS
+  model:
+    name: "cxrclip_plus_dqn"
+    temperature: 0.07
+    classification_head: 'dqn'
+    dqn_fusion_type: 'dqn_kad'
+    dqn_image_tokens: # for cross attention
+      use_all_image_tokens: True # false indicate using the local patch tokens only
+    dqn_bridge:
+      label_distribution_default_file: null
+      bridge_tokens: 0 # testing
+      rare_disease_less_than_threshold: null
+    deep_dqn:
+      enable_deep_dqn: False
+      deep_dqn_access_layers: [-1] # make sure it has the same number of layers as the dqn_nlayers
+    dqn_nheads: 4 # 16 with 2 layers, 8 with 4 layers
+    dqn_nlayers: 8
+    use_dqn_mlp_head: False
+    text_query_noise_std: 0.
+    dqn_allow_self_attention: True # TODO:
+    do_prediction_by_attention_maps: False
+    allow_disease_information_leakage_in_dqn: True # NOTE: ALWAYS TRUE intentional
+    enable_enriched_embeddings_as_input_to_dqn: False # this should be the default
+    enable_4d_descriptive_dqn_forwarding: False #
+    enable_dqn_prediction_by_image_query: False # the other side of ordinary dqn
+    enable_dqn_prediction_by_text_report: False
+    vision_features_miggle:
+      use_last_n_layer_features: [-1] # number of layer features to use for cross attention
+      operation: "sum" # average of the features
+    text_features_miggle:
+      use_last_n_layer_features: [-1] # number of layer features to use for cross attention
+      operation: "sum" # average of the features
+      cls_type: "cls" # either "patch" or "cls"
+      include_cls_token_to_patch_aggregation: False # default
+    image_encoder:
+      configs: ${image_model} # refers to the default.
+      vision_dual_cls: False
+      pretrained: True
+      freeze_backbone: False
+    text_encoder:
+      pretrained: True
+      configs: ${text_encoder} # refers to the default.
+      pooling: "bos"
+    projection_head:
+      name: "linear"  # one of { "linear" | "mlp" }
+      seperate_local_projection_head: True
+      dropout: 0.1
+      proj_dim: 768
+  optimizer:
+    lr: 5e-5
+    weight_decay: 1e-4 # 1e-6 (carzero), 1e-4
+    adamw_betas: [0.9, 0.95] # [0.9, 0.999] (carzero) or [0.9, 0.95]
+    no_decay: #[]
+      - bias
+      - position_embeddings
+      - layerNorm
+      - norm
+      - logit_scale
+      - word_embeddings
+      - pos_embed
+      - patch_embed
+      - token
+  scheduler:
+    name: "cosine" # one of ["cosine", "constant"]
+    total_epochs: 15
+    warmup_epochs: 1
+  loss:
+    is_learnable_temp: True # only valid in model/filip.py .
+    keep_prompt_queried_image_embeddings: False
+    cxrclip_plus_dqn:
+      include_contrastive_loss_term: True # toggle to use the image-report contrastive learning # TODO:
+      include_bidirectional_modality2label_mp_infoNCE: False # when using sigmoid based loss, should be false; if this is True, the include_contrastive_loss_term should be false 
+      is_decoupled_loss: True
+      enable_t2i_attention: False
+      enable_i2t_attention: False
+      attention_variant: null # None
+      asl:
+        asl_gamma_neg: 1 # 1 for query2label, 4 for ml-decoder
+        asl_gamma_pos: 0 # preserve full gradient signals of the positives
+      loss_type: BCEWithLogitsLoss_auxiliarySoftMax
+      BCEWithLogitsLoss_auxiliarySoftMax:
+        softmax_lambda: 1 # 1 for the rest, 0.8 for 224
+        gm_pred_lambda: 0 # useless
+        multi_pos_softmax: True # use all positives instead of random in masked softmax
+        multi_pos_version: mine
+        init_tau_aux: 1. # 1.0
+        min_tau_allowed_in_clamp: -100 # 2.0
+        max_tau_allowed_in_clamp: 100 #5.0
+        is_learnable_tau_aux: False # TODO: not learnable seems to be good.
+        lambda_aux_schedule: # for the dense weakly supervised loss
+          use_lambda_aux_schedule: False
+          lambda_max: 1
+      BCEWithLogitsLoss_auxiliarySoftMax_imglabel_mpinfonce:
+        mp_InfoNCE_function_type: 'out' # or "out"
+        enable_weakly_dense_supervision: False
+        weakly_dense_supervision_topk: 32
+
+hydra:
+  run:
+    dir: ./outputs/${now:%Y-%m-%d}/${now:%H-%M-%S}
+
+custom_dir:
+  checkpoint_dir: /cluster/projects/mcintoshgroup/CXR-CLIP/hydra_outputs/${now:%Y-%m-%d}/${now:%H-%M-%S}

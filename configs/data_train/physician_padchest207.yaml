@@ -1,0 +1,11 @@
+base:
+  name: "physician_padchest207"
+  data_type: "image_classification"
+  data_path: "/cluster/projects/mcintoshgroup/CXR-CLIP/preprossed_dataset_csv/padchest/padchest_train_for_fs.csv"
+  image_size: ${base.image_size}
+  n_class: 187 # instead of 204 based on preprocess_padchest, only relevant in the few-shot finetuning.
+  # fine tune params
+  data_frac: ${oc.select:base.data_frac,1.0}
+  sample_shots_not_percentage: ${oc.select:base.sample_shots_not_percentage,false}
+  enable_dqn_fewshot: ${oc.select:designs.enable_dqn_fewshot,false}
+  for_fintuning: true

@@ -1,0 +1,49 @@
+
+name: ${designs.model.name}
+temperature: ${designs.model.temperature}
+is_learnable_temp: ${designs.loss.is_learnable_temp}
+
+image_encoder: ${designs.model.image_encoder.configs}
+
+text_encoder: ${designs.model.text_encoder.configs}
+
+projection_head: # optional
+  name: ${designs.model.projection_head.name} # one of { "linear" | "mlp" }
+  proj_dim: ${designs.model.projection_head.proj_dim}
+  seperate_local_projection_head: ${designs.model.projection_head.seperate_local_projection_head}
+
+dqn_fusion_type: ${designs.model.dqn_fusion_type}
+dqn_nheads: ${designs.model.dqn_nheads}
+dqn_nlayers: ${designs.model.dqn_nlayers}
+enable_enriched_embeddings_as_input_to_dqn: ${designs.model.enable_enriched_embeddings_as_input_to_dqn}
+enable_4d_descriptive_dqn_forwarding: ${designs.model.enable_4d_descriptive_dqn_forwarding}
+dqn_label_max_length: ${base.dqn_label_max_length}
+use_dqn_mlp_head: ${designs.model.use_dqn_mlp_head}
+enable_dqn_prediction_by_image_query: ${designs.model.enable_dqn_prediction_by_image_query}
+enable_dqn_prediction_by_text_report: ${designs.model.enable_dqn_prediction_by_text_report}
+allow_disease_information_leakage_in_dqn: ${designs.model.allow_disease_information_leakage_in_dqn}
+label_distribution_default_file: ${designs.model.dqn_bridge.label_distribution_default_file}
+bridge_tokens: ${designs.model.dqn_bridge.bridge_tokens}
+rare_disease_less_than_threshold: ${designs.model.dqn_bridge.rare_disease_less_than_threshold}
+text_query_noise_std: ${designs.model.text_query_noise_std}
+
+dqn_allow_self_attention: ${designs.model.dqn_allow_self_attention}
+do_prediction_by_attention_maps: ${designs.model.do_prediction_by_attention_maps}
+labels_sample_size: ${designs.data.labels_sample_size}
+classification_head: ${designs.model.classification_head}
+
+dqn_image_tokens:
+  use_all_image_tokens: ${designs.model.dqn_image_tokens.use_all_image_tokens}
+
+# how to combine features for vision
+use_last_n_layer_features: ${designs.model.vision_features_miggle.use_last_n_layer_features}
+operation: ${designs.model.vision_features_miggle.operation}
+# how to combine features for text
+text_use_last_n_layer_features: ${designs.model.text_features_miggle.use_last_n_layer_features}
+text_operation: ${designs.model.text_features_miggle.operation}
+cls_type: ${designs.model.text_features_miggle.cls_type}
+include_cls_token_to_patch_aggregation: ${designs.model.text_features_miggle.include_cls_token_to_patch_aggregation}
+
+# deep dqn with default
+enable_deep_dqn: ${oc.select:designs.model.deep_dqn.enable_deep_dqn,false}
+deep_dqn_access_layers: ${oc.select:designs.model.deep_dqn.deep_dqn_access_layers,null}

@@ -1,0 +1,9 @@
+source: "microsoft" 
+name: 'raddino_b16'
+pretrained: ${designs.model.image_encoder.pretrained}
+model_type: 'ViT'
+cache_dir: '/cluster/projects/mcintoshgroup/CXR-CLIP/rad-dino/'
+dual_cls: ${designs.model.image_encoder.vision_dual_cls}
+normalize: 'raddino'
+freeze_backbone: ${designs.model.image_encoder.freeze_backbone}
+image_size: ${base.image_size}

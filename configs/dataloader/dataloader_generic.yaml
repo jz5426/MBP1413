@@ -1,0 +1,22 @@
+train:
+  pin_memory: True
+  shuffle: True
+  drop_last: True
+  num_workers: ${designs.dataloader.num_workers}
+  prefetch_factor: 16
+  batch_size: ${designs.dataloader.batch_size}
+
+valid:
+  pin_memory: True
+  shuffle: False
+  drop_last: False
+  num_workers: ${designs.dataloader.num_workers}
+  prefetch_factor: 16
+  batch_size: 128
+
+test:
+  pin_memory: True
+  shuffle: False
+  drop_last: False
+  num_workers: ${designs.dataloader.num_workers}
+  batch_size: 128

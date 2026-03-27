@@ -1,0 +1,9 @@
+base:
+  name: "chexpert"
+  data_type: "image_classification"
+  data_path: "/cluster/projects/mcintoshgroup/CXR-CLIP/preprossed_dataset_csv/chexpert/chexpert_test_eval.csv"
+  # data_path: "/cluster/projects/mcintoshgroup/CXR-CLIP/preprossed_dataset_csv/chexpert/chexpert_val_eval_frontal_only.csv"
+  image_size: ${base.image_size}
+  n_class: 12
+  enable_dqn_fewshot: ${oc.select:designs.enable_dqn_fewshot,false}
+  for_fintuning: true

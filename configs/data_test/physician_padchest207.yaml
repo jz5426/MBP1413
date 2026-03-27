@@ -1,0 +1,7 @@
+physician_padchest207:
+  name: "physician_padchest207"
+  data_type: "image_classification"
+  data_path: "/cluster/projects/mcintoshgroup/CXR-CLIP/preprossed_dataset_csv/padchest/padchest_physician_AP_PA_max_num_diseases.csv"
+  # data_path: "/cluster/projects/mcintoshgroup/CXR-CLIP/preprossed_dataset_csv/padchest/padchest_physician_AP_max_num_diseases.csv"
+  n_class: 187 # instead of 204 based on preprocess_padchest, only relevant in the few-shot finetuning. # TODO: need to change
+  normalize: ${designs.model.image_encoder.configs.normalize}

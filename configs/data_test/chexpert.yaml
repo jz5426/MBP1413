@@ -1,0 +1,7 @@
+chexpert:
+  name: "chexpert"
+  data_type: "image_classification"
+  data_path: "/cluster/projects/mcintoshgroup/CXR-CLIP/preprossed_dataset_csv/chexpert/chexpert_test_eval.csv"
+  # data_path: "/cluster/projects/mcintoshgroup/CXR-CLIP/preprossed_dataset_csv/chexpert/chexpert_test_eval_frontal_only.csv"
+  n_class: 12
+  normalize: ${designs.model.image_encoder.configs.normalize}

@@ -1,0 +1,4 @@
+source: "huggingface"
+pretrained_model_name_or_path: "emilyalsentzer/Bio_ClinicalBERT"
+cache_dir: "/cluster/projects/mcintoshgroup/CXR-CLIP/models--emilyalsentzer--Bio_ClinicalBERT/"
+dual_cls: ${designs.tokenizer.text_dual_cls}

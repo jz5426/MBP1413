@@ -1,0 +1,4 @@
+name: ${designs.scheduler.name} # one of ["cosine", "constant"]
+config:
+  total_epochs: ${designs.scheduler.total_epochs} 
+  warmup_epochs: ${designs.scheduler.warmup_epochs}

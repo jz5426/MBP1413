@@ -1,0 +1,34 @@
+cxrclip_plus_dqn:
+  label_smoothing: 0.0
+  i2i_weight: 1.0
+  t2t_weight: 1.0
+  loss_ratio: 1.0
+  is_decoupled_loss: ${designs.loss.cxrclip_plus_dqn.is_decoupled_loss}
+  enable_t2i_attention: ${designs.loss.cxrclip_plus_dqn.enable_t2i_attention}
+  enable_i2t_attention: ${designs.loss.cxrclip_plus_dqn.enable_i2t_attention}
+  attention_variant: ${designs.loss.cxrclip_plus_dqn.attention_variant}
+  keep_prompt_queried_image_embeddings: ${designs.loss.keep_prompt_queried_image_embeddings}
+  include_contrastive_loss_term: ${designs.loss.cxrclip_plus_dqn.include_contrastive_loss_term}
+  loss_type: ${designs.loss.cxrclip_plus_dqn.loss_type}
+  include_bidirectional_modality2label_mp_infoNCE: ${designs.loss.cxrclip_plus_dqn.include_bidirectional_modality2label_mp_infoNCE}
+
+  asl_gamma_neg: ${designs.loss.cxrclip_plus_dqn.asl.asl_gamma_neg}
+  asl_gamma_pos: ${designs.loss.cxrclip_plus_dqn.asl.asl_gamma_pos}
+
+  bce_lambda: ${designs.loss.cxrclip_plus_dqn.BCEWithLogitsLoss_auxiliarySoftMax.bce_lambda}
+  softmax_lambda: ${designs.loss.cxrclip_plus_dqn.BCEWithLogitsLoss_auxiliarySoftMax.softmax_lambda}
+  gm_pred_lambda: ${designs.loss.cxrclip_plus_dqn.BCEWithLogitsLoss_auxiliarySoftMax.gm_pred_lambda}
+  multi_pos_softmax: ${designs.loss.cxrclip_plus_dqn.BCEWithLogitsLoss_auxiliarySoftMax.multi_pos_softmax}
+  multi_pos_version: ${designs.loss.cxrclip_plus_dqn.BCEWithLogitsLoss_auxiliarySoftMax.multi_pos_version}
+  init_tau_aux: ${designs.loss.cxrclip_plus_dqn.BCEWithLogitsLoss_auxiliarySoftMax.init_tau_aux}
+  min_tau_allowed_in_clamp: ${designs.loss.cxrclip_plus_dqn.BCEWithLogitsLoss_auxiliarySoftMax.min_tau_allowed_in_clamp}
+  max_tau_allowed_in_clamp: ${designs.loss.cxrclip_plus_dqn.BCEWithLogitsLoss_auxiliarySoftMax.max_tau_allowed_in_clamp}
+  is_learnable_tau_aux: ${designs.loss.cxrclip_plus_dqn.BCEWithLogitsLoss_auxiliarySoftMax.is_learnable_tau_aux}
+
+  use_lambda_aux_schedule: ${designs.loss.cxrclip_plus_dqn.BCEWithLogitsLoss_auxiliarySoftMax.lambda_aux_schedule.use_lambda_aux_schedule}
+  # lambda_warmup_steps: ${designs.loss.cxrclip_plus_dqn.BCEWithLogitsLoss_auxiliarySoftMax.lambda_aux_schedule.lambda_warmup_steps}
+  lambda_max: ${designs.loss.cxrclip_plus_dqn.BCEWithLogitsLoss_auxiliarySoftMax.lambda_aux_schedule.lambda_max}
+
+  mp_InfoNCE_function_type: ${designs.loss.cxrclip_plus_dqn.BCEWithLogitsLoss_auxiliarySoftMax_imglabel_mpinfonce.mp_InfoNCE_function_type}
+  enable_weakly_dense_supervision: ${designs.loss.cxrclip_plus_dqn.BCEWithLogitsLoss_auxiliarySoftMax_imglabel_mpinfonce.enable_weakly_dense_supervision}
+  weakly_dense_supervision_topk: ${designs.loss.cxrclip_plus_dqn.BCEWithLogitsLoss_auxiliarySoftMax_imglabel_mpinfonce.weakly_dense_supervision_topk}

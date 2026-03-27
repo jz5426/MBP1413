@@ -1,0 +1,4 @@
+source: "huggingface"
+pretrained_model_name_or_path: "Laihaoran/BioClinicalMPBERT"
+cache_dir: "/cluster/projects/mcintoshgroup/CXR-CLIP/CARZero/Laihaoran_BioClinicalMPBERT"
+dual_cls: ${oc.select:designs.tokenizer.text_dual_cls,false}

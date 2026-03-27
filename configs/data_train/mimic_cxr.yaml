@@ -1,0 +1,19 @@
+mimic_cxr:
+  name: "mimic_cxr"
+  data_type: "imagetext"
+  # data_path: "/cluster/projects/mcintoshgroup/CXR-CLIP/mimic_cxr_jpg_metadata/mimic_train_400png.csv" # the latest version checked on 25/09/2025
+  data_path: "/cluster/projects/mcintoshgroup/CXR-CLIP/preprossed_dataset_csv/mimic-cxr/mimic_train_400png_multihot204.csv"
+  image_size: ${base.image_size}
+  text_max_length: ${base.text_max_length}
+  prompt_max_length: ${base.prompt_max_length}
+  dqn_label_max_length: ${base.dqn_label_max_length}
+  data_frac: 1.0
+  labels_sample_size: ${designs.data.labels_sample_size}
+  add_alignment_prompt_prefix: ${designs.data.add_alignment_prompt_prefix}
+  report_col: ${designs.data.report_col} # default is "text"
+  augmented_report_col: ${designs.data.augmented_report_col}  # default is "text_augment" only matters on with augmention_type == 'cxrclip'
+  augmentation_type: ${designs.data.augmentation_type}
+  alignment_prompt_col: ${designs.data.alignment_prompt_col}
+  normalize: ${designs.model.image_encoder.configs.normalize}
+  observation_explanation: ${designs.data.observation_explanation}
+  # THIS CONFIG IS CXRCLIP STYLE TRAINNIG BUT WITH CLEANED REPORT USING QWEN INSTEAD.

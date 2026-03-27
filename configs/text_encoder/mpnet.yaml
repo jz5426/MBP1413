@@ -1,0 +1,10 @@
+source: "huggingface" # one of { "huggingface"}
+name: sentence-transformers/all-mpnet-base-v2
+pretrained: ${oc.select:designs.model.text_encoder.pretrained,true}
+gradient_checkpointing: false
+# pooling: "mean" # TODO: should be mean by default
+pooling: ${oc.select:designs.model.text_encoder.pooling,'mean'} # TODO: should be mean by default
+cache_dir: '/cluster/projects/mcintoshgroup/CXR-CLIP/all-mpnet-base-v2'
+trust_remote_code: true
+mlm_head: true
+dual_cls: ${oc.select:designs.tokenizer.text_dual_cls,false}

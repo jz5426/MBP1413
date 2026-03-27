@@ -1,0 +1,4 @@
+source: "huggingface"
+pretrained_model_name_or_path: "sentence-transformers/all-mpnet-base-v2"
+cache_dir: "/cluster/projects/mcintoshgroup/CXR-CLIP/all-mpnet-base-v2"
+dual_cls: ${oc.select:designs.tokenizer.text_dual_cls,false}

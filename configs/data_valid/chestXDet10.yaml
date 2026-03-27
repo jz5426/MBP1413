@@ -1,0 +1,9 @@
+base:
+  name: "chestxdet10"
+  data_type: "image_classification"
+  data_path: "/cluster/projects/mcintoshgroup/CXR-CLIP/preprossed_dataset_csv/chestXDet10/chestXDet10_test_for_fs.csv"
+  # data_path: "/cluster/projects/mcintoshgroup/CXR-CLIP/preprossed_dataset_csv/chestXDet10/test.csv"
+  image_size: ${base.image_size}
+  n_class: 10
+  enable_dqn_fewshot: ${oc.select:designs.enable_dqn_fewshot,false}
+  for_fintuning: true
